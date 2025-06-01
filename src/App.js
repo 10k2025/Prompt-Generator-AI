@@ -163,7 +163,7 @@ function App() {
         <header className="bg-gray-900 p-6 sm:p-8 border-b border-gray-700 flex items-center justify-center">
           <Sparkles className="w-8 h-8 text-yellow-400 mr-3" />
           <h1 className="text-3xl sm:text-4xl font-bold text-center text-white">
-            Veo3 Prompt Generator
+            Prompt Generator AI - GRATIS!
           </h1>
         </header>
 
