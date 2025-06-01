@@ -54,7 +54,7 @@ const promptData = {
       "Hening Total", "Efek Suara Mencekam", "Narasi Voice-over", "Musik Klasik"
     ],
     ui: {
-      title: "Veo3 Prompt Generator",
+      title: "Prompt Generator AI - GRATIS!",
       section1: "Pengaturan Dasar Adegan",
       section2: "Detail Visual & Estetika",
       section3: "Gerakan Kamera & Komposisi",
@@ -72,7 +72,7 @@ const promptData = {
       copySuccess: "Prompt berhasil disalin!",
       initialPrompt: "Isi kolom di atas untuk menghasilkan prompt...",
       supportText: "Jika aplikasi ini membantu dalam menciptakan prompt yang sinematik, jangan ragu berdonasi untuk saya jajan dan ngopi - Kam sia! 🙏",
-      supportButton: "TrakTir Kopi",
+      supportButton: "Traktir Kami Kopi",
       footerText: "Dibuat dengan ❤️ untuk inspirasi sinematik Anda.",
       langSelect: "Pilih Bahasa:" // New UI text
     }
@@ -128,7 +128,7 @@ const promptData = {
       "Total Silence", "Eerie Sound Effects", "Voice-over Narration", "Classical Music"
     ],
     ui: {
-      title: "Veo3 Prompt Generator",
+      title: "Prompt Generator AI - GRATIS!",
       section1: "Basic Scene Settings",
       section2: "Visual & Aesthetic Details",
       section3: "Camera Movement & Composition",
@@ -283,13 +283,12 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100 p-4 sm:p-8 font-inter">
       <div className="max-w-4xl mx-auto bg-gray-800 rounded-xl shadow-2xl overflow-hidden">
         <header className="bg-gray-900 p-6 sm:p-8 border-b border-gray-700 flex items-center justify-between">
-<header className="bg-gray-900 p-6 sm:p-8 border-b border-gray-700 flex items-center justify-center"> {/* Updated header styling */}
-  <div className="flex items-center"> {/* Simpan flex ini untuk ikon dan judul */}
-    <Sparkles className="w-8 h-8 text-yellow-400 mr-3" />
-    <h1 className="text-3xl sm:text-4xl font-bold text-center text-white">
-      {currentLangUI.title}
-    </h1>
-  </div>
+          <div className="flex items-center justify-center flex-grow">
+            <Sparkles className="w-8 h-8 text-yellow-400 mr-3" />
+            <h1 className="text-3xl sm:text-4xl font-bold text-center text-white">
+              {currentLangUI.title}
+            </h1>
+          </div>
         </header>
 
         <main className="p-6 sm:p-8 space-y-8">
