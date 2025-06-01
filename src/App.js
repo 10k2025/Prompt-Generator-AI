@@ -642,7 +642,7 @@ function App() {
               {currentLangUI.supportText}
             </p>
             <a
-              href="https://www.buymeacoffee.com/yourusername" // Ganti dengan tautan donasi Anda yang sebenarnya!
+              href="https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012012021082652842677" // Ganti dengan tautan donasi Anda yang sebenarnya!
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-full shadow-lg transform transition-transform duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 focus:ring-offset-gray-900"
