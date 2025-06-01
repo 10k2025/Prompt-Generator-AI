@@ -443,7 +443,7 @@ function App() {
               <Heart className="w-6 h-6 mr-2 text-pink-400" /> Dukung Kami
             </h2>
             <p className="text-gray-300 mb-6">
-              Jika aplikasi ini membantu dalam menciptakan prompt yang sinematik, jangan ragu untuk berdonasi agar saya bisa jajan dan ngopi - Kam sia
+              Jika aplikasi ini membantu dalam menciptakan prompt yang sinematik, jangan ragu berdonasi untuk saya jajan dan ngopi - Kam sia!
             </p>
             <a
               href="https://www.buymeacoffee.com/yourusername" // Ganti dengan tautan donasi Anda yang sebenarnya!
