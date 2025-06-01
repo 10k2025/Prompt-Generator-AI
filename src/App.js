@@ -72,7 +72,7 @@ const promptData = {
       copySuccess: "Prompt berhasil disalin!",
       initialPrompt: "Isi kolom di atas untuk menghasilkan prompt...",
       supportText: "Jika aplikasi ini membantu dalam menciptakan prompt yang sinematik, jangan ragu berdonasi untuk saya jajan dan ngopi - Kam sia! 🙏",
-      supportButton: "Traktir Kami Kopi",
+      supportButton: "Traktir Kopi",
       footerText: "Dibuat dengan ❤️ untuk inspirasi sinematik Anda.",
       langSelect: "Pilih Bahasa:" // New UI text
     }
