@@ -283,24 +283,13 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100 p-4 sm:p-8 font-inter">
       <div className="max-w-4xl mx-auto bg-gray-800 rounded-xl shadow-2xl overflow-hidden">
         <header className="bg-gray-900 p-6 sm:p-8 border-b border-gray-700 flex items-center justify-between">
-          <div className="flex items-center justify-center flex-grow">
-            <Sparkles className="w-8 h-8 text-yellow-400 mr-3" />
-            <h1 className="text-3xl sm:text-4xl font-bold text-center text-white">
-              {currentLangUI.title}
-            </h1>
-          </div>
-          {/* Language selector for UI only (prompt output is always dual) */}
-          <div className="flex items-center">
-            <Globe className="w-5 h-5 text-gray-300 mr-2" />
-            <select
-              value={lang}
-              onChange={(e) => setLang(e.target.value)}
-              className="p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500 text-sm"
-            >
-              <option value="id">Bahasa Indonesia</option>
-              <option value="en">English</option>
-            </select>
-          </div>
+<header className="bg-gray-900 p-6 sm:p-8 border-b border-gray-700 flex items-center justify-center"> {/* Updated header styling */}
+  <div className="flex items-center"> {/* Simpan flex ini untuk ikon dan judul */}
+    <Sparkles className="w-8 h-8 text-yellow-400 mr-3" />
+    <h1 className="text-3xl sm:text-4xl font-bold text-center text-white">
+      {currentLangUI.title}
+    </h1>
+  </div>
         </header>
 
         <main className="p-6 sm:p-8 space-y-8">
