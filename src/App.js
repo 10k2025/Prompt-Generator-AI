@@ -1,242 +1,255 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Copy, Sparkles, Camera, Palette, Sun, Film, Mic, BookOpen, Volume2, MessageSquare, Heart, Globe } from 'lucide-react';
+import { Copy, Sparkles, BookOpen, Film, Mic, Palette, Users, MessageSquare, Volume2, Heart } from 'lucide-react';
 
 // Data teks prompt dalam dua bahasa
 const promptData = {
   id: {
-    jenisAdeganOptions: [
-      "", "Senja Dramatis", "Pagi Tenang", "Malam Misterius", "Aksi Cepat",
-      "Momen Introspektif", "Horor Mencekam", "Fantasi Epik", "Komedi Ringan",
-      "Thriller Psikologis", "Petualangan Luar Angkasa", "Dokumenter Alam"
+    gayaVisualOptions: [
+      "", "Realistis", "Animasi", "Semi-realistis", "3D Render", "Lukisan Digital", "Sketsa Pensil"
     ],
-    pencahayaanOptions: [
-      "", "Cahaya Keemasan Menembus", "Bayangan Panjang", "Backlit Dramatis",
-      "Remang-remang", "Neon Berkedip", "Cahaya Alami Lembut", "Cahaya Bulan Keperakan",
-      "Lampu Sorot Tajam", "Siluet Kontras", "Cahaya Stroboskopik"
+    warnaOptions: [
+      "", "Hangat, nuansa senja", "Dingin, nuansa pagi", "Cerah, kontras tinggi", "Monokrom", "Pastel lembut"
     ],
-    paletWarnaOptions: [
-      "", "Hangat (Oranye, Kuning, Merah)", "Dingin (Biru, Ungu, Hijau)", "Kontras Tinggi",
-      "Pastel Lembut", "Monokromatis", "Saturasi Tinggi", "Saturasi Rendah",
-      "Warna Vibrant", "Sepia Tone", "Grayscale", "Palet Warna Bumi"
+    formatOptions: [
+      "", "16:9 landscape", "9:16 portrait", "1:1 square", "4:3 standard"
     ],
-    elemenAtmosferOptions: [
-      "", "Kabut Tipis", "Asap Mengepul", "Hujan Rintik", "Salju Perlahan",
-      "Daun Berguguran", "Partikel Debu Melayang", "Uap Panas", "Kilatan Petir",
-      "Angin Kencang", "Embun Pagi", "Badai Pasir"
+    suaraKarakterOptions: [
+      "", "tenang dan bijak", "ragu tapi bersemangat", "ceria dan energik", "serius dan tegas", "lembut dan hangat", "berwibawa"
     ],
-    gayaSinematikOptions: [
-      "", "Realistis", "Surealis", "Noir", "Mimpi", "Retro-futuristik",
-      "Gritty", "Clean & Polished", "Dokumenter", "Vintage", "Gaya Film Indie",
-      "Gaya Film Klasik", "Gaya Animasi Stop-Motion"
+    bahasaKarakterOptions: [
+      "", "Bahasa Indonesia standar", "Bahasa Inggris", "Bahasa Sunda", "Bahasa Jawa", "Bahasa Melayu"
     ],
-    propertiLensaOptions: [
-      "", "Anamorphic", "Wide-angle", "Telephoto Compression", "Fisheye",
-      "2.35:1 Cinematic Aspect Ratio", "16:9 Standard", "4:3 Classic", "Macro Lens",
-      "Tilt-Shift Lens", "Prime Lens"
+    ekspresiWajahOptions: [
+      "", "Mengikuti emosi suara", "Tenang dan datar", "Bersemangat dan ekspresif", "Khawatir", "Tersenyum"
     ],
-    gerakanKameraOptions: [
-      "", "Tracking Shot Mulus", "Slow Pan", "Zoom Out Dramatis", "Handheld Stabil",
-      "Dolly Push In", "Crane Shot Megah", "Steadicam Following", "Tilt Up",
-      "Tilt Down", "Orbit Shot", "POV (Point of View)", "Drone Shot", "Reverse Zoom"
+    musikLatarOptions: [
+      "", "Instrumen akustik lembut", "Orkestra epik", "Elektronik futuristik", "Klasik", "Jazz", "Pop ceria"
     ],
-    tipeShotOptions: [
-      "", "Close-up Intim", "Wide Shot Epik", "Low Angle", "High Angle",
-      "Rule of Thirds", "Leading Lines", "Framing Alami (jendela/pohon)",
-      "Dutch Angle", "Medium Shot", "Extreme Close-up", "Over-the-Shoulder",
-      "Two Shot", "Master Shot"
+    efekSuaraOptions: [
+      "", "Gemericik air", "Suara burung", "Langkah kaki", "Deru mesin", "Suara alam"
     ],
-    fokusOptions: [
-      "", "Shallow Depth of Field", "Rack Focus", "Deep Focus", "Auto Focus", "Manual Focus"
-    ],
-    jenisAudioMusikOptions: [
-      "", "Musik Orkestra Dramatis", "Soundscape Ambient", "Suara Alam (Hujan, Angin)",
-      "Musik Jazz Lembut", "Soundtrack Elektronik Futuristik", "Suara Bising Kota",
-      "Hening Total", "Efek Suara Mencekam", "Narasi Voice-over", "Musik Klasik"
+    suasanaAudioOptions: [
+      "", "Pedesaan", "Hutan", "Perkotaan", "Ruang Hampa", "Di dalam rumah", "Hening"
     ],
     ui: {
-      title: "Prompt Generator AI - GRATIS!",
-      section1: "Pengaturan Dasar Adegan",
-      section2: "Detail Visual & Estetika",
-      section3: "Gerakan Kamera & Komposisi",
-      section4: "Nuansa & Makna",
-      section5: "Audio & Dialog",
+      title: "Prompt Generator Gratis",
+      section1: "Judul & Tema",
+      section2: "Gaya Visual",
+      section3: "Karakter & Suara",
+      section4: "Dialog & Sinkronisasi",
+      section5: "Deskripsi Visual Detail",
+      section6: "Audio & Musik Latar",
       outputSection: "Prompt yang Dihasilkan",
-      supportSection: "Dukung Kami",
-      subjekUtamaPlaceholder: "Contoh: Seorang wanita tua duduk di bangku taman",
-      lingkunganPlaceholder: "Contoh: taman botani yang sepi",
-      teksturDetailPlaceholder: "Contoh: detail kerutan di tangannya, uap mengepul pelan",
-      emosiSuasanaPlaceholder: "Contoh: Nostalgia dan sedikit melankolis",
-      temaMaknaPlaceholder: "Contoh: kehilangan dan kenangan yang indah",
-      dialogNarasiPlaceholder: "Contoh: 'Ini adalah awal dari segalanya...' atau 'Suara bisikan misterius di latar belakang.'",
+      judulLabel: "Judul",
+      judulPlaceholder: "Contoh: Warisan Menanam Padi",
+      temaLabel: "Tema Utama",
+      temaPlaceholder: "Contoh: Emosional, inspiratif, regenerasi petani muda",
+      gayaLabel: "Gaya",
+      warnaLabel: "Palet Warna",
+      formatLabel: "Format",
+      karakter1Label: "Karakter A (Deskripsi)",
+      karakter1Placeholder: "Contoh: Pria dewasa",
+      suaraKarakter1Label: "Suara Karakter A",
+      bahasaKarakter1Label: "Bahasa Karakter A",
+      karakter2Label: "Karakter B (Deskripsi)",
+      karakter2Placeholder: "Contoh: Remaja laki-laki",
+      suaraKarakter2Label: "Suara Karakter B",
+      bahasaKarakter2Label: "Bahasa Karakter B",
+      dialogLabel: "Dialog (Format: 00:00 A: 'Dialog')",
+      dialogPlaceholder: "Contoh:\n00:00 A: 'Sudah lama tanah ini tidur.'\n00:06 B: 'Kini saatnya kita bangunkan kembali.'",
+      lipSyncLabel: "Lip-sync",
+      ekspresiWajahLabel: "Ekspresi Wajah",
+      visualLabel: "Deskripsi Visual (Format: 00:00: Deskripsi)",
+      visualPlaceholder: "Contoh:\n00:00: Kamera melayang di atas sawah, cahaya senja menyinari air.\n00:06: Close-up wajah remaja, mata menatap lahan.",
+      musikLatarLabel: "Musik Latar",
+      efekSuaraLabel: "Efek Suara",
+      suasanaAudioLabel: "Suasana Audio",
       copyButton: "Salin",
       copySuccess: "Prompt berhasil disalin!",
       initialPrompt: "Isi kolom di atas untuk menghasilkan prompt...",
-      supportText: "Jika aplikasi ini membantu dalam menciptakan prompt yang sinematik, jangan ragu berdonasi untuk saya jajan dan ngopi - Kam sia! 🙏",
-      supportButton: "Traktir Kopi",
-      footerText: "Dibuat dengan ❤️ untuk inspirasi sinematik Anda.",
-      langSelect: "Pilih Bahasa:" // New UI text
+      supportText: "Jika aplikasi ini membantu dalam menciptakan prompt yang sinematik, jangan ragu berdonasi buat jajan dan ngopi - Kam sia! 🙏", // Teks di bawah tombol
+      supportButton: "Traktir Kopi", // Teks tombol
+      footerText: "Dibuat dengan ❤️ untuk inspirasi sinematik Anda."
     }
   },
   en: {
-    jenisAdeganOptions: [
-      "", "Dramatic Sunset", "Peaceful Morning", "Mysterious Night", "Fast-Paced Action",
-      "Introspective Moment", "Terrifying Horror", "Epic Fantasy", "Light Comedy",
-      "Psychological Thriller", "Space Adventure", "Nature Documentary"
+    gayaVisualOptions: [
+      "", "Realistic", "Animated", "Semi-realistic", "3D Render", "Digital Painting", "Pencil Sketch"
     ],
-    pencahayaanOptions: [
-      "", "Golden Hour Light Filtering Through", "Long Shadows", "Dramatic Backlight",
-      "Dimly Lit", "Flickering Neon", "Soft Natural Light", "Silvery Moonlight",
-      "Sharp Spotlights", "High-Contrast Silhouette", "Stroboscopic Light"
+    warnaOptions: [
+      "", "Warm, sunset hues", "Cool, morning hues", "Bright, high contrast", "Monochromatic", "Soft pastel"
     ],
-    paletWarnaOptions: [
-      "", "Warm Palette (Orange, Yellow, Red)", "Cool Palette (Blue, Purple, Green)", "High Contrast",
-      "Soft Pastels", "Monochromatic", "High Saturation", "Low Saturation",
-      "Vibrant Colors", "Sepia Tone", "Grayscale", "Earthy Tones"
+    formatOptions: [
+      "", "16:9 landscape", "9:16 portrait", "1:1 square", "4:3 standard"
     ],
-    elemenAtmosferOptions: [
-      "", "Thin Fog", "Puffing Smoke", "Drizzling Rain", "Slowly Falling Snow",
-      "Falling Leaves", "Floating Dust Particles", "Hot Steam", "Flickering Lightning",
-      "Strong Winds", "Morning Dew", "Sandstorm"
+    suaraKarakterOptions: [
+      "", "calm and wise voice", "hesitant but enthusiastic voice", "cheerful and energetic voice", "serious and firm voice", "soft and warm voice", "authoritative voice"
     ],
-    gayaSinematikOptions: [
-      "", "Realistic", "Surreal", "Noir", "Dreamlike", "Retro-futuristic",
-      "Gritty", "Clean & Polished", "Documentary Style", "Vintage", "Indie Film Style",
-      "Classic Film Style", "Stop-Motion Animation Style"
+    bahasaKarakterOptions: [
+      "", "Standard Indonesian", "English", "Sundanese", "Javanese", "Malay"
     ],
-    propertiLensaOptions: [
-      "", "Anamorphic", "Wide-angle", "Telephoto Compression", "Fisheye",
-      "2.35:1 Cinematic Aspect Ratio", "16:9 Standard", "4:3 Classic", "Macro Lens",
-      "Tilt-Shift Lens", "Prime Lens"
+    ekspresiWajahOptions: [
+      "", "Following voice emotion", "Calm and flat", "Enthusiastic and expressive", "Worried", "Smiling"
     ],
-    gerakanKameraOptions: [
-      "", "Smooth Tracking Shot", "Slow Pan", "Dramatic Zoom Out", "Handheld Stable",
-      "Dolly Push In", "Grand Crane Shot", "Steadicam Following", "Tilt Up",
-      "Tilt Down", "Orbit Shot", "POV (Point of View)", "Drone Shot", "Reverse Zoom"
+    musikLatarOptions: [
+      "", "Soft acoustic instrumental", "Epic orchestral", "Futuristic electronic", "Classical", "Jazz", "Upbeat pop"
     ],
-    tipeShotOptions: [
-      "", "Intimate Close-up", "Epic Wide Shot", "Low Angle", "High Angle",
-      "Rule of Thirds", "Leading Lines", "Natural Framing (window/trees)",
-      "Dutch Angle", "Medium Shot", "Extreme Close-up", "Over-the-Shoulder",
-      "Two Shot", "Master Shot"
+    efekSuaraOptions: [
+      "", "Water trickling", "Bird sounds", "Footsteps", "Engine hum", "Nature sounds"
     ],
-    fokusOptions: [
-      "", "Shallow Depth of Field", "Rack Focus", "Deep Focus", "Auto Focus", "Manual Focus"
-    ],
-    jenisAudioMusikOptions: [
-      "", "Dramatic Orchestral Music", "Ambient Soundscape", "Nature Sounds (Rain, Wind)",
-      "Soft Jazz Music", "Futuristic Electronic Soundtrack", "City Noise",
-      "Total Silence", "Eerie Sound Effects", "Voice-over Narration", "Classical Music"
+    suasanaAudioOptions: [
+      "", "Rural", "Forest", "Urban", "Zero Gravity", "Indoors", "Silent"
     ],
     ui: {
-      title: "Prompt Generator AI - GRATIS!",
-      section1: "Basic Scene Settings",
-      section2: "Visual & Aesthetic Details",
-      section3: "Camera Movement & Composition",
-      section4: "Emotion & Mood",
-      section5: "Audio & Dialogue",
+      title: "Veo3 Gemini Prompt Generator",
+      section1: "Title & Theme",
+      section2: "Visual Style",
+      section3: "Characters & Voice",
+      section4: "Dialogue & Synchronization",
+      section5: "Detailed Visual Description",
+      section6: "Audio & Background Music",
       outputSection: "Generated Prompt",
-      supportSection: "Support Us",
-      subjekUtamaPlaceholder: "Example: An old woman sitting on a park bench",
-      lingkunganPlaceholder: "Example: a quiet botanical garden",
-      teksturDetailPlaceholder: "Example: wrinkles on her hands, steam gently rising from a cup",
-      emosiSuasanaPlaceholder: "Example: Nostalgic and slightly melancholic",
-      temaMaknaPlaceholder: "Example: loss and cherished memories",
-      dialogNarasiPlaceholder: "Example: 'This is the beginning of everything...' or 'Mysterious whispers in the background.'",
+      supportSection: "Support Us", // Judul bagian dukungan
+      judulLabel: "Title",
+      judulPlaceholder: "Example: Legacy of Rice Planting",
+      temaLabel: "Main Theme",
+      temaPlaceholder: "Example: Emotional, inspiring, youth farmer regeneration",
+      gayaLabel: "Style",
+      warnaLabel: "Color Palette",
+      formatLabel: "Format",
+      karakter1Label: "Character A (Description)",
+      karakter1Placeholder: "Example: Adult man",
+      suaraKarakter1Label: "Voice of Character A",
+      bahasaKarakter1Label: "Language of Character A",
+      karakter2Label: "Character B (Description)",
+      karakter2Placeholder: "Example: Teenage boy",
+      suaraKarakter2Label: "Voice of Character B",
+      bahasaKarakter2Label: "Language of Character B",
+      dialogLabel: "Dialogue (Format: 00:00 A: 'Dialogue')",
+      dialogPlaceholder: "Example:\n00:00 A: 'Long has this land slept.'\n00:06 B: 'Now it's time to awaken it again.'",
+      lipSyncLabel: "Lip-sync",
+      ekspresiWajahLabel: "Facial Expression",
+      visualLabel: "Visual Description (Format: 00:00: Description)",
+      visualPlaceholder: "Example:\n00:00: Camera floats over rice fields, sunset light illuminating water.\n00:06: Close-up of teenager's face, eyes looking at the land.",
+      musikLatarLabel: "Background Music",
+      efekSuaraLabel: "Sound Effects",
+      suasanaAudioLabel: "Audio Ambiance",
       copyButton: "Copy",
       copySuccess: "Prompt copied successfully!",
       initialPrompt: "Fill in the fields above to generate a prompt...",
-      supportText: "If this prompt generator helps spark your cinematic ideas, a small contribution for coffee/snacks would mean a lot for continued development. 🙏",
-      supportButton: "Buy Us A Coffee",
-      footerText: "Made with ❤️ for your cinematic inspiration.",
-      langSelect: "Select Language:" // New UI text
+      supportText: "If this prompt generator helps spark your cinematic ideas, a small contribution for coffee/snacks would mean a lot for continued development. 🙏", // Teks di bawah tombol
+      supportButton: "Buy Us A Coffee", // Teks tombol
+      footerText: "Made with ❤️ for your cinematic inspiration."
     }
   }
 };
 
 function App() {
-  const [lang, setLang] = useState('id'); // Default language: Indonesia
-  // The language dropdown will now control only the UI labels, not the generated prompt output language
-  const currentLangUI = promptData[lang].ui;
+  const currentLangUI = promptData.id.ui; // UI will always be in ID
 
-  // State untuk setiap bagian prompt
-  const [jenisAdegan, setJenisAdegan] = useState('');
-  const [subjekUtama, setSubjekUtama] = useState('');
-  const [lingkungan, setLingkungan] = useState('');
-  const [pencahayaan, setPencahayaan] = useState('');
-  const [paletWarna, setPaletWarna] = useState('');
-  const [teksturDetail, setTeksturDetail] = useState('');
-  const [elemenAtmosfer, setElemenAtmosfer] = useState('');
-  const [gayaSinematik, setGayaSinematik] = useState('');
-  const [propertiLensa, setPropertiLensa] = useState('');
-  const [gerakanKamera, setGerakanKamera] = useState('');
-  const [tipeShot, setTipeShot] = useState('');
-  const [fokus, setFokus] = useState('');
-  const [emosiSuasana, setEmosiSuasana] = useState('');
-  const [temaMakna, setTemaMakna] = useState('');
-  const [jenisAudioMusik, setJenisAudioMusik] = useState('');
-  const [dialogNarasi, setDialogNarasi] = useState('');
+  // State untuk setiap bagian prompt baru
+  const [judul, setJudul] = useState('');
+  const [tema, setTema] = useState('');
+  const [gayaVisual, setGayaVisual] = useState('');
+  const [warna, setWarna] = useState('');
+  const [format, setFormat] = useState('');
+  const [karakter1Desc, setKarakter1Desc] = useState('');
+  const [suaraKarakter1, setSuaraKarakter1] = useState('');
+  const [bahasaKarakter1, setBahasaKarakter1] = useState('');
+  const [karakter2Desc, setKarakter2Desc] = useState('');
+  const [suaraKarakter2, setSuaraKarakter2] = useState('');
+  const [bahasaKarakter2, setBahasaKarakter2] = useState('');
+  const [dialog, setDialog] = useState('');
+  const [lipSync, setLipSync] = useState('');
+  const [ekspresiWajah, setEkspresiWajah] = useState('');
+  const [visualDesc, setVisualDesc] = useState('');
+  const [musikLatar, setMusikLatar] = useState('');
+  const [efekSuara, setEfekSuara] = useState('');
+  const [suasanaAudio, setSuasanaAudio] = useState('');
 
-  const [generatedPromptId, setGeneratedPromptId] = useState(''); // Prompt Bahasa Indonesia
-  const [generatedPromptEn, setGeneratedPromptEn] = useState(''); // Prompt Bahasa Inggris
+  // States untuk output prompt bilingual
+  const [generatedPromptId, setGeneratedPromptId] = useState('');
+  const [generatedPromptEn, setGeneratedPromptEn] = useState('');
 
   const promptOutputIdRef = useRef(null);
   const promptOutputEnRef = useRef(null);
   const [copySuccess, setCopySuccess] = useState('');
-  const [copyTarget, setCopyTarget] = useState(''); // To know which prompt was copied
+  const [copyTarget, setCopyTarget] = useState('');
 
-  // Fungsi untuk menghasilkan prompt dalam bahasa tertentu
+  // Fungsi untuk mendapatkan terjemahan opsi dropdown
+  const getTranslatedOption = (optionValue, idOptionsArray, enOptionsArray) => {
+    const index = idOptionsArray.indexOf(optionValue);
+    return index !== -1 ? enOptionsArray[index] : optionValue;
+  };
+
+  // Fungsi untuk membangun prompt dalam bahasa tertentu
   const buildPrompt = (targetLang) => {
     let prompt = [];
     const promptLangData = promptData[targetLang];
 
-    // MENGGUNAKAN DATA TEKS DARI BAHASA TARGET UNTUK MEMBANGUN PROMPT
-    const selectedJenisAdegan = promptLangData.jenisAdeganOptions.find(opt => opt === jenisAdegan) || jenisAdegan;
-    const selectedPencahayaan = promptLangData.pencahayaanOptions.find(opt => opt === pencahayaan) || pencahayaan;
-    const selectedPaletWarna = promptLangData.paletWarnaOptions.find(opt => opt === paletWarna) || paletWarna;
-    const selectedElemenAtmosfer = promptLangData.elemenAtmosferOptions.find(opt => opt === elemenAtmosfer) || elemenAtmosfer;
-    const selectedGayaSinematik = promptLangData.gayaSinematikOptions.find(opt => opt === gayaSinematik) || gayaSinematik;
-    const selectedPropertiLensa = promptLangData.propertiLensaOptions.find(opt => opt === propertiLensa) || propertiLensa;
-    const selectedGerakanKamera = promptLangData.gerakanKameraOptions.find(opt => opt === gerakanKamera) || gerakanKamera;
-    const selectedTipeShot = promptLangData.tipeShotOptions.find(opt => opt === tipeShot) || tipeShot;
-    const selectedFokus = promptLangData.fokusOptions.find(opt => opt === fokus) || fokus;
-    const selectedJenisAudioMusik = promptLangData.jenisAudioMusikOptions.find(opt => opt === jenisAudioMusik) || jenisAudioMusik;
+    // 1. Judul & Tema
+    if (judul || tema) {
+      prompt.push(`${targetLang === 'id' ? 'Judul: ' : 'Title: '}${judul || 'Untitled'}`);
+      if (tema) prompt.push(`${targetLang === 'id' ? 'Tema: ' : 'Theme: '}${tema}`);
+    }
 
+    // 2. Gaya Visual
+    if (gayaVisual || warna || format) {
+      prompt.push(`${targetLang === 'id' ? 'Gaya Visual: ' : 'Visual Style: '}`);
+      const visualDetails = [];
+      if (gayaVisual) visualDetails.push(targetLang === 'id' ? gayaVisual : getTranslatedOption(gayaVisual, promptData.id.gayaVisualOptions, promptData.en.gayaVisualOptions));
+      if (warna) visualDetails.push(`${targetLang === 'id' ? 'Warna: ' : 'Color: '}${targetLang === 'id' ? warna : getTranslatedOption(warna, promptData.id.warnaOptions, promptData.en.warnaOptions)}`);
+      if (format) visualDetails.push(`${targetLang === 'id' ? 'Format: ' : 'Format: '}${targetLang === 'id' ? format : getTranslatedOption(format, promptData.id.formatOptions, promptData.en.formatOptions)}`);
+      prompt.push(visualDetails.join(', ') + '.');
+    }
 
-    // Bagian 1: Pengaturan Dasar Adegan
-    if (selectedJenisAdegan) prompt.push(`${selectedJenisAdegan}.`);
-    if (subjekUtama) prompt.push(`${subjekUtama}.`);
-    if (lingkungan) prompt.push(`${targetLang === 'id' ? 'Di ' : 'In '} ${lingkungan}.`);
+    // 3. Karakter & Suara
+    if (karakter1Desc || karakter2Desc) {
+      prompt.push(`${targetLang === 'id' ? 'Karakter & Suara: ' : 'Characters & Voice: '}`);
+      if (karakter1Desc) {
+        let charA = `${targetLang === 'id' ? 'Karakter A: ' : 'Character A: '}${karakter1Desc}`;
+        const charAVoice = targetLang === 'id' ? suaraKarakter1 : getTranslatedOption(suaraKarakter1, promptData.id.suaraKarakterOptions, promptData.en.suaraKarakterOptions);
+        const charALang = targetLang === 'id' ? bahasaKarakter1 : getTranslatedOption(bahasaKarakter1, promptData.id.bahasaKarakterOptions, promptData.en.bahasaKarakterOptions);
+        if (charAVoice || charALang) {
+          charA += ` (${charAVoice || ''}, ${charALang || ''})`;
+        }
+        prompt.push(charA);
+      }
+      if (karakter2Desc) {
+        let charB = `${targetLang === 'id' ? 'Karakter B: ' : 'Character B: '}${karakter2Desc}`;
+        const charBVoice = targetLang === 'id' ? suaraKarakter2 : getTranslatedOption(suaraKarakter2, promptData.id.suaraKarakterOptions, promptData.en.suaraKarakterOptions);
+        const charBLang = targetLang === 'id' ? bahasaKarakter2 : getTranslatedOption(bahasaKarakter2, promptData.id.bahasaKarakterOptions, promptData.en.bahasaKarakterOptions);
+        if (charBVoice || charBLang) {
+          charB += ` (${charBVoice || ''}, ${charBLang || ''})`;
+        }
+        prompt.push(charB);
+      }
+    }
 
-    // Bagian 2: Detail Visual & Estetika
-    const visualDetails = [];
-    if (selectedPencahayaan) visualDetails.push(selectedPencahayaan);
-    if (selectedPaletWarna) visualDetails.push(`${targetLang === 'id' ? 'Palet warna ' : 'Color palette '}${selectedPaletWarna}`);
-    if (teksturDetail) visualDetails.push(teksturDetail);
-    if (selectedElemenAtmosfer) visualDetails.push(selectedElemenAtmosfer);
-    if (selectedGayaSinematik) visualDetails.push(selectedGayaSinematik);
-    if (selectedPropertiLensa) visualDetails.push(selectedPropertiLensa);
-    if (visualDetails.length > 0) prompt.push(visualDetails.join(', ') + '.');
+    // 4. Dialog & Sinkronisasi
+    if (dialog || lipSync || ekspresiWajah) {
+      prompt.push(`${targetLang === 'id' ? 'Dialog & Sinkronisasi: ' : 'Dialogue & Synchronization: '}`);
+      if (dialog) prompt.push(`${targetLang === 'id' ? 'Dialog: ' : 'Dialogue: '}\n${dialog}`);
+      if (lipSync) prompt.push(`${targetLang === 'id' ? 'Lip-sync: ' : 'Lip-sync: '}${targetLang === 'id' ? (lipSync === 'Aktif' ? 'Aktif' : 'Nonaktif') : (lipSync === 'Aktif' ? 'Active' : 'Inactive')}`);
+      if (ekspresiWajah) prompt.push(`${targetLang === 'id' ? 'Ekspresi Wajah: ' : 'Facial Expression: '}${targetLang === 'id' ? ekspresiWajah : getTranslatedOption(ekspresiWajah, promptData.id.ekspresiWajahOptions, promptData.en.ekspresiWajahOptions)}`);
+    }
 
-    // Bagian 3: Gerakan Kamera & Komposisi
-    const cameraDetails = [];
-    if (selectedGerakanKamera) cameraDetails.push(selectedGerakanKamera);
-    if (selectedTipeShot) cameraDetails.push(selectedTipeShot);
-    if (selectedFokus) cameraDetails.push(selectedFokus);
-    if (cameraDetails.length > 0) prompt.push(cameraDetails.join(', ') + '.');
+    // 5. Deskripsi Visual Detail
+    if (visualDesc) {
+      prompt.push(`${targetLang === 'id' ? 'Deskripsi Visual: ' : 'Visual Description: '}\n${visualDesc}`);
+    }
 
-    // Bagian 4: Nuansa & Makna
-    const moodDetails = [];
-    if (emosiSuasana) moodDetails.push(`${targetLang === 'id' ? 'Suasana ' : 'Mood: '}${emosiSuasana}`);
-    if (temaMakna) moodDetails.push(`${targetLang === 'id' ? 'mengisyaratkan ' : 'hinting at '}${temaMakna}`);
-    if (moodDetails.length > 0) prompt.push(moodDetails.join(', ') + '.');
+    // 6. Audio & Musik Latar
+    if (musikLatar || efekSuara || suasanaAudio) {
+      prompt.push(`${targetLang === 'id' ? 'Audio & Musik Latar: ' : 'Audio & Background Music: '}`);
+      const audioDetails = [];
+      if (musikLatar) audioDetails.push(`${targetLang === 'id' ? 'Musik Latar: ' : 'Background Music: '}${targetLang === 'id' ? musikLatar : getTranslatedOption(musikLatar, promptData.id.musikLatarOptions, promptData.en.musikLatarOptions)}`);
+      if (efekSuara) audioDetails.push(`${targetLang === 'id' ? 'Efek Suara: ' : 'Sound Effects: '}${targetLang === 'id' ? efekSuara : getTranslatedOption(efekSuara, promptData.id.efekSuaraOptions, promptData.en.efekSuaraOptions)}`);
+      if (suasanaAudio) audioDetails.push(`${targetLang === 'id' ? 'Suasana Audio: ' : 'Audio Ambiance: '}${targetLang === 'id' ? suasanaAudio : getTranslatedOption(suasanaAudio, promptData.id.suasanaAudioOptions, promptData.en.suasanaAudioOptions)}`);
+      prompt.push(audioDetails.join(', ') + '.');
+    }
 
-    // Bagian 5: Audio & Dialog
-    const audioDialogDetails = [];
-    if (selectedJenisAudioMusik) audioDialogDetails.push(`${targetLang === 'id' ? 'Audio: ' : 'Audio: '}${selectedJenisAudioMusik}`);
-    if (dialogNarasi) audioDialogDetails.push(`${targetLang === 'id' ? 'Dialog/Narasi: ' : 'Dialogue/Narration: '}"${dialogNarasi}"`);
-    if (audioDialogDetails.length > 0) prompt.push(audioDialogDetails.join(', ') + '.');
-
-    return prompt.filter(Boolean).join(' ');
+    return prompt.filter(Boolean).join('\n\n'); // Gabungkan dengan dua baris baru untuk keterbacaan
   };
 
   // Efek untuk menghasilkan prompt saat input berubah
@@ -244,10 +257,11 @@ function App() {
     setGeneratedPromptId(buildPrompt('id'));
     setGeneratedPromptEn(buildPrompt('en'));
   }, [
-    jenisAdegan, subjekUtama, lingkungan, pencahayaan, paletWarna,
-    teksturDetail, elemenAtmosfer, gayaSinematik, propertiLensa,
-    gerakanKamera, tipeShot, fokus, emosiSuasana, temaMakna,
-    jenisAudioMusik, dialogNarasi
+    judul, tema, gayaVisual, warna, format,
+    karakter1Desc, suaraKarakter1, bahasaKarakter1,
+    karakter2Desc, suaraKarakter2, bahasaKarakter2,
+    dialog, lipSync, ekspresiWajah, visualDesc,
+    musikLatar, efekSuara, suasanaAudio
   ]);
 
   // Fungsi untuk menyalin prompt ke clipboard
@@ -282,8 +296,8 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100 p-4 sm:p-8 font-inter">
       <div className="max-w-4xl mx-auto bg-gray-800 rounded-xl shadow-2xl overflow-hidden">
-        <header className="bg-gray-900 p-6 sm:p-8 border-b border-gray-700 flex items-center justify-between">
-          <div className="flex items-center justify-center flex-grow">
+        <header className="bg-gray-900 p-6 sm:p-8 border-b border-gray-700 flex items-center justify-center">
+          <div className="flex items-center">
             <Sparkles className="w-8 h-8 text-yellow-400 mr-3" />
             <h1 className="text-3xl sm:text-4xl font-bold text-center text-white">
               {currentLangUI.title}
@@ -292,275 +306,319 @@ function App() {
         </header>
 
         <main className="p-6 sm:p-8 space-y-8">
-          {/* Bagian 1: Pengaturan Dasar Adegan */}
+          {/* Bagian 1: Judul & Tema */}
           <section className="bg-gray-700 p-6 rounded-lg shadow-inner">
             <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-white flex items-center">
               <BookOpen className="w-6 h-6 mr-2 text-blue-300" /> {currentLangUI.section1}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="jenisAdegan" className="block text-sm font-medium text-gray-300 mb-1">
-                  {lang === 'id' ? 'Jenis Adegan/Mood Utama' : 'Main Scene Type/Mood'}
-                </label>
-                <select
-                  id="jenisAdegan"
-                  value={jenisAdegan}
-                  onChange={(e) => setJenisAdegan(e.target.value)}
-                  className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  {promptData.id.jenisAdeganOptions.map(option => ( // Use fixed ID options for input
-                    <option key={option} value={option}>{lang === 'id' ? (option || 'Pilih...') : promptData.en.jenisAdeganOptions[promptData.id.jenisAdeganOptions.indexOf(option)] || 'Select...'}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label htmlFor="subjekUtama" className="block text-sm font-medium text-gray-300 mb-1">
-                  {lang === 'id' ? 'Subjek Utama & Aksinya' : 'Main Subject & Action'}
+                <label htmlFor="judul" className="block text-sm font-medium text-gray-300 mb-1">
+                  {currentLangUI.judulLabel}
                 </label>
                 <input
                   type="text"
-                  id="subjekUtama"
-                  value={subjekUtama}
-                  onChange={(e) => setSubjekUtama(e.target.value)}
-                  placeholder={currentLangUI.subjekUtamaPlaceholder}
+                  id="judul"
+                  value={judul}
+                  onChange={(e) => setJudul(e.target.value)}
+                  placeholder={currentLangUI.judulPlaceholder}
                   className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
-              <div className="md:col-span-2">
-                <label htmlFor="lingkungan" className="block text-sm font-medium text-gray-300 mb-1">
-                  {lang === 'id' ? 'Lingkungan/Latar' : 'Environment/Setting'}
+              <div>
+                <label htmlFor="tema" className="block text-sm font-medium text-gray-300 mb-1">
+                  {currentLangUI.temaLabel}
                 </label>
                 <input
                   type="text"
-                  id="lingkungan"
-                  value={lingkungan}
-                  onChange={(e) => setLingkungan(e.target.value)}
-                  placeholder={currentLangUI.lingkunganPlaceholder}
+                  id="tema"
+                  value={tema}
+                  onChange={(e) => setTema(e.target.value)}
+                  placeholder={currentLangUI.temaPlaceholder}
                   className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
             </div>
           </section>
 
-          {/* Bagian 2: Detail Visual & Estetika */}
+          {/* Bagian 2: Gaya Visual */}
           <section className="bg-gray-700 p-6 rounded-lg shadow-inner">
             <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-white flex items-center">
               <Palette className="w-6 h-6 mr-2 text-green-300" /> {currentLangUI.section2}
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label htmlFor="pencahayaan" className="block text-sm font-medium text-gray-300 mb-1">
-                  {lang === 'id' ? 'Pencahayaan' : 'Lighting'}
+                <label htmlFor="gayaVisual" className="block text-sm font-medium text-gray-300 mb-1">
+                  {currentLangUI.gayaLabel}
                 </label>
                 <select
-                  id="pencahayaan"
-                  value={pencahayaan}
-                  onChange={(e) => setPencahayaan(e.target.value)}
+                  id="gayaVisual"
+                  value={gayaVisual}
+                  onChange={(e) => setGayaVisual(e.target.value)}
                   className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
                 >
-                  {promptData.id.pencahayaanOptions.map(option => (
-                    <option key={option} value={option}>{lang === 'id' ? (option || 'Pilih...') : promptData.en.pencahayaanOptions[promptData.id.pencahayaanOptions.indexOf(option)] || 'Select...'}</option>
+                  {promptData.id.gayaVisualOptions.map(option => (
+                    <option key={option} value={option}>{option || 'Pilih...'}</option>
                   ))}
                 </select>
               </div>
               <div>
-                <label htmlFor="paletWarna" className="block text-sm font-medium text-gray-300 mb-1">
-                  {lang === 'id' ? 'Palet Warna' : 'Color Palette'}
+                <label htmlFor="warna" className="block text-sm font-medium text-gray-300 mb-1">
+                  {currentLangUI.warnaLabel}
                 </label>
                 <select
-                  id="paletWarna"
-                  value={paletWarna}
-                  onChange={(e) => setPaletWarna(e.target.value)}
+                  id="warna"
+                  value={warna}
+                  onChange={(e) => setWarna(e.target.value)}
                   className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
                 >
-                  {promptData.id.paletWarnaOptions.map(option => (
-                    <option key={option} value={option}>{lang === 'id' ? (option || 'Pilih...') : promptData.en.paletWarnaOptions[promptData.id.paletWarnaOptions.indexOf(option)] || 'Select...'}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="md:col-span-2">
-                <label htmlFor="teksturDetail" className="block text-sm font-medium text-gray-300 mb-1">
-                  {lang === 'id' ? 'Tekstur & Detail Mikro' : 'Texture & Micro Details'}
-                </label>
-                <textarea
-                  id="teksturDetail"
-                  value={teksturDetail}
-                  onChange={(e) => setTeksturDetail(e.target.value)}
-                  placeholder={currentLangUI.teksturDetailPlaceholder}
-                  rows="2"
-                  className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
-                ></textarea>
-              </div>
-              <div>
-                <label htmlFor="elemenAtmosfer" className="block text-sm font-medium text-gray-300 mb-1">
-                  {lang === 'id' ? 'Elemen Atmosfer' : 'Atmospheric Elements'}
-                </label>
-                <select
-                  id="elemenAtmosfer"
-                  value={elemenAtmosfer}
-                  onChange={(e) => setElemenAtmosfer(e.target.value)}
-                  className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  {promptData.id.elemenAtmosferOptions.map(option => (
-                    <option key={option} value={option}>{lang === 'id' ? (option || 'Pilih...') : promptData.en.elemenAtmosferOptions[promptData.id.elemenAtmosferOptions.indexOf(option)] || 'Select...'}</option>
+                  {promptData.id.warnaOptions.map(option => (
+                    <option key={option} value={option}>{option || 'Pilih...'}</option>
                   ))}
                 </select>
               </div>
               <div>
-                <label htmlFor="gayaSinematik" className="block text-sm font-medium text-gray-300 mb-1">
-                  {lang === 'id' ? 'Gaya Sinematik' : 'Cinematic Style'}
+                <label htmlFor="format" className="block text-sm font-medium text-gray-300 mb-1">
+                  {currentLangUI.formatLabel}
                 </label>
                 <select
-                  id="gayaSinematik"
-                  value={gayaSinematik}
-                  onChange={(e) => setGayaSinematik(e.target.value)}
+                  id="format"
+                  value={format}
+                  onChange={(e) => setFormat(e.target.value)}
                   className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
                 >
-                  {promptData.id.gayaSinematikOptions.map(option => (
-                    <option key={option} value={option}>{lang === 'id' ? (option || 'Pilih...') : promptData.en.gayaSinematikOptions[promptData.id.gayaSinematikOptions.indexOf(option)] || 'Select...'}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="md:col-span-2">
-                <label htmlFor="propertiLensa" className="block text-sm font-medium text-gray-300 mb-1">
-                  {lang === 'id' ? 'Properti Lensa/Aspek Rasio' : 'Lens Property/Aspect Ratio'}
-                </label>
-                <select
-                  id="propertiLensa"
-                  value={propertiLensa}
-                  onChange={(e) => setPropertiLensa(e.target.value)}
-                  className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  {promptData.id.propertiLensaOptions.map(option => (
-                    <option key={option} value={option}>{lang === 'id' ? (option || 'Pilih...') : promptData.en.propertiLensaOptions[promptData.id.propertiLensaOptions.indexOf(option)] || 'Select...'}</option>
+                  {promptData.id.formatOptions.map(option => (
+                    <option key={option} value={option}>{option || 'Pilih...'}</option>
                   ))}
                 </select>
               </div>
             </div>
           </section>
 
-          {/* Bagian 3: Gerakan Kamera & Komposisi */}
+          {/* Bagian 3: Karakter & Suara */}
           <section className="bg-gray-700 p-6 rounded-lg shadow-inner">
             <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-white flex items-center">
-              <Camera className="w-6 h-6 mr-2 text-purple-300" /> {currentLangUI.section3}
+              <Users className="w-6 h-6 mr-2 text-purple-300" /> {currentLangUI.section3}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="gerakanKamera" className="block text-sm font-medium text-gray-300 mb-1">
-                  {lang === 'id' ? 'Gerakan Kamera' : 'Camera Movement'}
-                </label>
-                <select
-                  id="gerakanKamera"
-                  value={gerakanKamera}
-                  onChange={(e) => setGerakanKamera(e.target.value)}
-                  className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  {promptData.id.gerakanKameraOptions.map(option => (
-                    <option key={option} value={option}>{lang === 'id' ? (option || 'Pilih...') : promptData.en.gerakanKameraOptions[promptData.id.gerakanKameraOptions.indexOf(option)] || 'Select...'}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label htmlFor="tipeShot" className="block text-sm font-medium text-gray-300 mb-1">
-                  {lang === 'id' ? 'Tipe Shot/Komposisi' : 'Shot Type/Composition'}
-                </label>
-                <select
-                  id="tipeShot"
-                  value={tipeShot}
-                  onChange={(e) => setTipeShot(e.target.value)}
-                  className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  {promptData.id.tipeShotOptions.map(option => (
-                    <option key={option} value={option}>{lang === 'id' ? (option || 'Pilih...') : promptData.en.tipeShotOptions[promptData.id.tipeShotOptions.indexOf(option)] || 'Select...'}</option>
-                  ))}
-                </select>
-              </div>
+              {/* Karakter A */}
               <div className="md:col-span-2">
-                <label htmlFor="fokus" className="block text-sm font-medium text-gray-300 mb-1">
-                  {lang === 'id' ? 'Fokus' : 'Focus'}
-                </label>
-                <select
-                  id="fokus"
-                  value={fokus}
-                  onChange={(e) => setFokus(e.target.value)}
-                  className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  {promptData.id.fokusOptions.map(option => (
-                    <option key={option} value={option}>{lang === 'id' ? (option || 'Pilih...') : promptData.en.fokusOptions[promptData.id.fokusOptions.indexOf(option)] || 'Select...'}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </section>
-
-          {/* Bagian 4: Nuansa & Makna */}
-          <section className="bg-gray-700 p-6 rounded-lg shadow-inner">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-white flex items-center">
-              <Mic className="w-6 h-6 mr-2 text-red-300" /> {currentLangUI.section4}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="emosiSuasana" className="block text-sm font-medium text-gray-300 mb-1">
-                  {lang === 'id' ? 'Emosi/Suasana' : 'Emotion/Mood'}
+                <label htmlFor="karakter1Desc" className="block text-sm font-medium text-gray-300 mb-1">
+                  {currentLangUI.karakter1Label}
                 </label>
                 <input
                   type="text"
-                  id="emosiSuasana"
-                  value={emosiSuasana}
-                  onChange={(e) => setEmosiSuasana(e.target.value)}
-                  placeholder={currentLangUI.emosiSuasanaPlaceholder}
+                  id="karakter1Desc"
+                  value={karakter1Desc}
+                  onChange={(e) => setKarakter1Desc(e.target.value)}
+                  placeholder={currentLangUI.karakter1Placeholder}
                   className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
               <div>
-                <label htmlFor="temaMakna" className="block text-sm font-medium text-gray-300 mb-1">
-                  {lang === 'id' ? 'Tema/Makna (Opsional)' : 'Theme/Meaning (Optional)'}
+                <label htmlFor="suaraKarakter1" className="block text-sm font-medium text-gray-300 mb-1">
+                  {currentLangUI.suaraKarakter1Label}
+                </label>
+                <select
+                  id="suaraKarakter1"
+                  value={suaraKarakter1}
+                  onChange={(e) => setSuaraKarakter1(e.target.value)}
+                  className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
+                >
+                  {promptData.id.suaraKarakterOptions.map(option => (
+                    <option key={option} value={option}>{option || 'Pilih...'}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="bahasaKarakter1" className="block text-sm font-medium text-gray-300 mb-1">
+                  {currentLangUI.bahasaKarakter1Label}
+                </label>
+                <select
+                  id="bahasaKarakter1"
+                  value={bahasaKarakter1}
+                  onChange={(e) => setBahasaKarakter1(e.target.value)}
+                  className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
+                >
+                  {promptData.id.bahasaKarakterOptions.map(option => (
+                    <option key={option} value={option}>{option || 'Pilih...'}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Karakter B (Opsional) */}
+              <div className="md:col-span-2 mt-4">
+                <label htmlFor="karakter2Desc" className="block text-sm font-medium text-gray-300 mb-1">
+                  {currentLangUI.karakter2Label}
                 </label>
                 <input
                   type="text"
-                  id="temaMakna"
-                  value={temaMakna}
-                  onChange={(e) => setTemaMakna(e.target.value)}
-                  placeholder={currentLangUI.temaMaknaPlaceholder}
+                  id="karakter2Desc"
+                  value={karakter2Desc}
+                  onChange={(e) => setKarakter2Desc(e.target.value)}
+                  placeholder={currentLangUI.karakter2Placeholder}
                   className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
                 />
+              </div>
+              <div>
+                <label htmlFor="suaraKarakter2" className="block text-sm font-medium text-gray-300 mb-1">
+                  {currentLangUI.suaraKarakter2Label}
+                </label>
+                <select
+                  id="suaraKarakter2"
+                  value={suaraKarakter2}
+                  onChange={(e) => setSuaraKarakter2(e.target.value)}
+                  className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
+                >
+                  {promptData.id.suaraKarakterOptions.map(option => (
+                    <option key={option} value={option}>{option || 'Pilih...'}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="bahasaKarakter2" className="block text-sm font-medium text-gray-300 mb-1">
+                  {currentLangUI.bahasaKarakter2Label}
+                </label>
+                <select
+                  id="bahasaKarakter2"
+                  value={bahasaKarakter2}
+                  onChange={(e) => setBahasaKarakter2(e.target.value)}
+                  className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
+                >
+                  {promptData.id.bahasaKarakterOptions.map(option => (
+                    <option key={option} value={option}>{option || 'Pilih...'}</option>
+                  ))}
+                </select>
               </div>
             </div>
           </section>
 
-          {/* Bagian 5: Audio & Dialog */}
+          {/* Bagian 4: Dialog & Sinkronisasi */}
           <section className="bg-gray-700 p-6 rounded-lg shadow-inner">
             <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-white flex items-center">
-              <Volume2 className="w-6 h-6 mr-2 text-orange-300" /> {currentLangUI.section5}
+              <MessageSquare className="w-6 h-6 mr-2 text-red-300" /> {currentLangUI.section4}
+            </h2>
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <label htmlFor="dialog" className="block text-sm font-medium text-gray-300 mb-1">
+                  {currentLangUI.dialogLabel}
+                </label>
+                <textarea
+                  id="dialog"
+                  value={dialog}
+                  onChange={(e) => setDialog(e.target.value)}
+                  placeholder={currentLangUI.dialogPlaceholder}
+                  rows="4"
+                  className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
+                ></textarea>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="lipSync" className="block text-sm font-medium text-gray-300 mb-1">
+                    {currentLangUI.lipSyncLabel}
+                  </label>
+                  <select
+                    id="lipSync"
+                    value={lipSync}
+                    onChange={(e) => setLipSync(e.target.value)}
+                    className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option value="">Pilih...</option>
+                    <option value="Aktif">Aktif</option>
+                    <option value="Nonaktif">Nonaktif</option>
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="ekspresiWajah" className="block text-sm font-medium text-gray-300 mb-1">
+                    {currentLangUI.ekspresiWajahLabel}
+                  </label>
+                  <select
+                    id="ekspresiWajah"
+                    value={ekspresiWajah}
+                    onChange={(e) => setEkspresiWajah(e.target.value)}
+                    className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    {promptData.id.ekspresiWajahOptions.map(option => (
+                      <option key={option} value={option}>{option || 'Pilih...'}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Bagian 5: Deskripsi Visual Detail */}
+          <section className="bg-gray-700 p-6 rounded-lg shadow-inner">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-white flex items-center">
+              <Film className="w-6 h-6 mr-2 text-yellow-300" /> {currentLangUI.section5}
+            </h2>
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <label htmlFor="visualDesc" className="block text-sm font-medium text-gray-300 mb-1">
+                  {currentLangUI.visualLabel}
+                </label>
+                <textarea
+                  id="visualDesc"
+                  value={visualDesc}
+                  onChange={(e) => setVisualDesc(e.target.value)}
+                  placeholder={currentLangUI.visualPlaceholder}
+                  rows="6"
+                  className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
+                ></textarea>
+              </div>
+            </div>
+          </section>
+
+          {/* Bagian 6: Audio & Musik Latar */}
+          <section className="bg-gray-700 p-6 rounded-lg shadow-inner">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-white flex items-center">
+              <Volume2 className="w-6 h-6 mr-2 text-orange-300" /> {currentLangUI.section6}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="jenisAudioMusik" className="block text-sm font-medium text-gray-300 mb-1">
-                  {lang === 'id' ? 'Jenis Audio/Musik' : 'Audio/Music Type'}
+                <label htmlFor="musikLatar" className="block text-sm font-medium text-gray-300 mb-1">
+                  {currentLangUI.musikLatarLabel}
                 </label>
                 <select
-                  id="jenisAudioMusik"
-                  value={jenisAudioMusik}
-                  onChange={(e) => setJenisAudioMusik(e.target.value)}
+                  id="musikLatar"
+                  value={musikLatar}
+                  onChange={(e) => setMusikLatar(e.target.value)}
                   className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
                 >
-                  {promptData.id.jenisAudioMusikOptions.map(option => (
-                    <option key={option} value={option}>{lang === 'id' ? (option || 'Pilih...') : promptData.en.jenisAudioMusikOptions[promptData.id.jenisAudioMusikOptions.indexOf(option)] || 'Select...'}</option>
+                  {promptData.id.musikLatarOptions.map(option => (
+                    <option key={option} value={option}>{option || 'Pilih...'}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="efekSuara" className="block text-sm font-medium text-gray-300 mb-1">
+                  {currentLangUI.efekSuaraLabel}
+                </label>
+                <select
+                  id="efekSuara"
+                  value={efekSuara}
+                  onChange={(e) => setEfekSuara(e.target.value)}
+                  className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
+                >
+                  {promptData.id.efekSuaraOptions.map(option => (
+                    <option key={option} value={option}>{option || 'Pilih...'}</option>
                   ))}
                 </select>
               </div>
               <div className="md:col-span-2">
-                <label htmlFor="dialogNarasi" className="block text-sm font-medium text-gray-300 mb-1">
-                  {lang === 'id' ? 'Dialog/Narasi Spesifik' : 'Specific Dialogue/Narration'}
+                <label htmlFor="suasanaAudio" className="block text-sm font-medium text-gray-300 mb-1">
+                  {currentLangUI.suasanaAudioLabel}
                 </label>
-                <textarea
-                  id="dialogNarasi"
-                  value={dialogNarasi}
-                  onChange={(e) => setDialogNarasi(e.target.value)}
-                  placeholder={currentLangUI.dialogNarasiPlaceholder}
-                  rows="2"
-                  className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
-                ></textarea>
+                <select
+                  id="suasanaAudio"
+                  value={suasanaAudio}
+                  onChange={(e) => setSuasanaAudio(e.target.value)}
+                  className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-blue-500 focus:border-blue-500"
+                >
+                  {promptData.id.suasanaAudioOptions.map(option => (
+                    <option key={option} value={option}>{option || 'Pilih...'}</option>
+                  ))}
+                </select>
               </div>
             </div>
           </section>
@@ -638,6 +696,8 @@ function App() {
               <Heart className="w-5 h-5 mr-2" />
               {currentLangUI.supportButton}
             </a>
+            {/* Bagian detail transfer BCA dan DANA telah dihapus di sini */}
+            {/* Teks saran di bawah tombol donasi juga telah dihapus */}
           </section>
         </main>
 
